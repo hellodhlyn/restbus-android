@@ -1,5 +1,6 @@
 package com.lynlab.restbus.api
 
+import com.lynlab.restbus.model.BusRoute
 import io.reactivex.Observable
 import retrofit2.Retrofit
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
@@ -22,8 +23,19 @@ class RestApi {
         restApiService = retrofit.create(RestApiService::class.java)
     }
 
+    /**
+     * GET /v1/hello
+     */
     fun getHello(): Observable<String> {
-        return restApiService.hello()
+        return restApiService.getHello()
+    }
+
+    /**
+     * GET /v1/routes?query={query}
+     * @param query 노선 이름
+     */
+    fun getRoutes(query: String): Observable<List<BusRoute>> {
+        return restApiService.getRoutes(query)
     }
 
 }

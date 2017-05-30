@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">RestBus</string>
 
+    <string name="text_search_route">노선 찾기</string>
+
     <string name="toast_error_network">서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.</string>
 </resources>
