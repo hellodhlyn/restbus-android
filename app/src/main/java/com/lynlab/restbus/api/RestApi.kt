@@ -11,6 +11,11 @@ import retrofit2.converter.gson.GsonConverterFactory
  */
 class RestApi {
 
+    private object Holder { var INSTANCE = RestApi() }
+    companion object {
+        val instance: RestApi by lazy { Holder.INSTANCE }
+    }
+
     private val restApiService: RestApiService
 
     init {
