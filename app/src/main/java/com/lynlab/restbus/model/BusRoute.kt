@@ -20,13 +20,13 @@ class BusRoute {
 
     var lastStationName: String?
 
-    var firstBusTime: Date?
+    var firstBusTime: Date
 
-    var lastBusTime: Date?
+    var lastBusTime: Date
 
     var term: Int
 
-    constructor(routeId: Int, routeName: String, routeType: Int, firstStationName: String?, lastStationName: String?, firstBusTime: Date?, lastBusTime: Date?, term: Int) {
+    constructor(routeId: Int, routeName: String, routeType: Int, firstStationName: String?, lastStationName: String?, firstBusTime: Date, lastBusTime: Date, term: Int) {
         this.routeId = routeId
         this.routeName = routeName
         this.routeType = routeType

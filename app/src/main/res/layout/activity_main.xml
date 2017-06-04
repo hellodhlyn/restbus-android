@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.lynlab.restbus.view.activity.MainActivity">
 
-    <android.support.v4.view.ViewPager
+    <com.lynlab.restbus.view.viewgroup.LockableViewPager
         android:id="@+id/activity_main_viewpager"
         android:layout_width="match_parent"
         android:layout_height="match_parent" />

@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,11 +16,12 @@ import com.lynlab.restbus.view.adapter.SearchRouteRecyclerViewAdapter
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import io.reactivex.subjects.PublishSubject
 
 /**
  * 노선 검색 프래그먼트
  */
-class SearchRouteFragment : Fragment() {
+class SearchRouteFragment(private val nextPageSubject: PublishSubject<Any?>) : Fragment() {
 
     private val restApi = RestApi.instance
     private val recyclerViewAdapter = SearchRouteRecyclerViewAdapter()
@@ -55,8 +55,7 @@ class SearchRouteFragment : Fragment() {
      */
     fun setOnClickAction() {
         recyclerViewAdapter.getOnItemClickObservable().subscribe({ routeId ->
-            // TODO implement
-            Log.i(this.javaClass.simpleName, "RouteId $routeId selected.")
+            nextPageSubject.onNext(routeId)
         })
     }
 
