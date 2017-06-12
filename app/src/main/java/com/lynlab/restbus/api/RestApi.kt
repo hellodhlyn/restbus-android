@@ -21,7 +21,7 @@ class RestApi {
 
     init {
         val retrofit = Retrofit.Builder()
-                .baseUrl("http://apis.lynlab.co.kr")
+                .baseUrl("http://restbus.lynlab.co.kr")
                 .addConverterFactory(GsonConverterFactory.create())
                 .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()

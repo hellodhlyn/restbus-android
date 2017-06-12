@@ -18,6 +18,6 @@ interface RestApiService {
     fun getRoutes(@Query("query") query: String): Observable<List<BusRoute>>
 
     @GET("/v1/stations")
-    fun getStations(@Query("routeId") routeId: Int): Observable<List<BusStation>>
+    fun getStations(@Query("route_id") routeId: Int): Observable<List<BusStation>>
 
 }

@@ -1,5 +1,7 @@
 package com.lynlab.restbus.view.adapter
 
+import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -12,7 +14,7 @@ import io.reactivex.subjects.PublishSubject
 /**
  * 노선 검색결과 RecyclerView 어댑터
  */
-class SearchRouteRecyclerViewAdapter : RecyclerView.Adapter<SearchRouteRecyclerVH>() {
+class SearchRouteRecyclerViewAdapter(private var context: Context) : RecyclerView.Adapter<SearchRouteRecyclerVH>() {
 
     private val onItemClickSubject: PublishSubject<Int> = PublishSubject.create()
     private var items: List<BusRoute> = ArrayList()
@@ -26,6 +28,18 @@ class SearchRouteRecyclerViewAdapter : RecyclerView.Adapter<SearchRouteRecyclerV
         holder.itemView.setOnClickListener({ onItemClickSubject.onNext(items[position].routeId) })
 
         holder.nameTextView!!.text = items[position].routeName
+        holder.nameTextView!!.setTextColor(ContextCompat.getColor(context,
+                when (items[position].routeType) {
+                    1 -> R.color.font_orange        // 공항 버스
+                    3 -> R.color.font_blue          // 간선 버스
+                    2, 4 -> R.color.font_green         // 지선 버스
+                    5 -> R.color.font_yellow        // 순환 버스
+                    6 -> R.color.font_red           // 광역 버스
+                    7, 8 -> R.color.font_teal       // 인천/경기 버스
+                    else -> R.color.font_black
+                }
+        ))
+
         holder.pathTextView!!.text = "${items[position].firstStationName} → ${items[position].lastStationName}"
     }
 
