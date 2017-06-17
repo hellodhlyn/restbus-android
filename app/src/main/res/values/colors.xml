@@ -7,6 +7,8 @@
     <color name="divider">#e9ecef</color>
 
     <color name="font_black">#212529</color>
+    <color name="font_gray_dark">#868e96</color>
+    <color name="font_gray_light">#adb5bd</color>
 
     <color name="font_red">#c92a2a</color>
     <color name="font_orange">#d9480f</color>

@@ -23,7 +23,9 @@ import io.reactivex.subjects.PublishSubject
 /**
  * 노선 검색 프래그먼트
  */
-class SearchRouteFragment(private val nextPageSubject: PublishSubject<Any?>) : Fragment() {
+class SearchRouteFragment(private val pageSubject: PublishSubject<Any?>) : Fragment() {
+
+    data class OnClickArgs(val routeId: Int)
 
     private val restApi = RestApi.instance
     private var recyclerViewAdapter: SearchRouteRecyclerViewAdapter? = null
@@ -32,6 +34,8 @@ class SearchRouteFragment(private val nextPageSubject: PublishSubject<Any?>) : F
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         recyclerViewAdapter = SearchRouteRecyclerViewAdapter(context)
+
+        setOnClickAction()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -45,8 +49,6 @@ class SearchRouteFragment(private val nextPageSubject: PublishSubject<Any?>) : F
         recyclerView.setHasFixedSize(true)
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.adapter = recyclerViewAdapter
-
-        setOnClickAction()
 
         // 검색 Observable 추가
         val searchEditText = view.findViewById(R.id.edittext_search_route) as EditText
@@ -65,9 +67,7 @@ class SearchRouteFragment(private val nextPageSubject: PublishSubject<Any?>) : F
      * 아이템을 선택했을 때의 동작을 설정한다.
      */
     fun setOnClickAction() {
-        recyclerViewAdapter!!.getOnItemClickObservable().subscribe({ routeId ->
-            nextPageSubject.onNext(routeId)
-        })
+        recyclerViewAdapter!!.onItemClick({ args -> pageSubject.onNext(args) })
     }
 
     /**
@@ -80,8 +80,8 @@ class SearchRouteFragment(private val nextPageSubject: PublishSubject<Any?>) : F
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { routes ->
-                            recyclerViewAdapter!!.setItems(routes)
-                            recyclerViewAdapter!!.notifyDataSetChanged()
+                            recyclerViewAdapter?.setItems(routes)
+                            recyclerViewAdapter?.notifyDataSetChanged()
                         },
                         { e ->
                             Toast.makeText(context, R.string.toast_error_network, Toast.LENGTH_SHORT).show()

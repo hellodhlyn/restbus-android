@@ -11,11 +11,11 @@ import com.lynlab.restbus.R
 class StationItemVH(itemView: View) : RecyclerView.ViewHolder(itemView) {
 
     var nameTextView: TextView? = null
-    var idTextView: TextView? = null
+    var numTextView: TextView? = null
 
     init {
         nameTextView = itemView.findViewById(R.id.textview_item_station_list_name) as TextView
-        idTextView = itemView.findViewById(R.id.textview_item_station_list_id) as TextView
+        numTextView = itemView.findViewById(R.id.textview_item_station_list_id) as TextView
     }
 
 }

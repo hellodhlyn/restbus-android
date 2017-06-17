@@ -20,21 +20,38 @@ import io.reactivex.subjects.PublishSubject
 /**
  * 정류장 목록 프래그먼트
  */
-class StationListFragment(nextPageSubject: PublishSubject<Any?>) : Fragment() {
+class StationListFragment(private val pageSubject: PublishSubject<Any?>) : Fragment() {
+
+    data class OnClickArgs(val routeId: Int, val stationId: Int, val order: Int)
 
     private val restApi = RestApi.instance
-    private val recyclerViewAdapter = StationListRecyclerViewAdapter()
-    private var progrssBar: ProgressBar? = null
+    private var recyclerViewAdapter: StationListRecyclerViewAdapter? = null
+    private var progressBar: ProgressBar? = null
 
     init {
-        nextPageSubject.subscribe({ arg -> loadStations(arg as Int) })
+        pageSubject.subscribe({ args ->
+            if (args is SearchRouteFragment.OnClickArgs) {
+                recyclerViewAdapter?.clear()
+                recyclerViewAdapter?.notifyDataSetChanged()
+
+                recyclerViewAdapter?.setRouteId(args.routeId)
+                requestStations(args.routeId)
+            }
+        })
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        recyclerViewAdapter = StationListRecyclerViewAdapter(context)
+
+        setOnClickAction()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.fragment_station_list, container, false)
 
         // ProgressBar 설정
-        progrssBar = view.findViewById(R.id.progressbar_view_station_list) as ProgressBar
+        progressBar = view.findViewById(R.id.progressbar_view_station_list) as ProgressBar
 
         // RecyclerView 설정
         val recyclerView = view.findViewById(R.id.recycler_view_station_list) as RecyclerView
@@ -45,22 +62,26 @@ class StationListFragment(nextPageSubject: PublishSubject<Any?>) : Fragment() {
         return view
     }
 
-    fun loadStations(routeId: Int) {
-        progrssBar?.visibility = View.VISIBLE
+    fun setOnClickAction() {
+        recyclerViewAdapter!!.onItemClick({ args -> pageSubject.onNext(args) })
+    }
+
+    fun requestStations(routeId: Int) {
+        progressBar?.visibility = View.VISIBLE
         restApi.getStations(routeId)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
                         { stations ->
-                            recyclerViewAdapter.setItems(stations)
-                            recyclerViewAdapter.notifyDataSetChanged()
+                            recyclerViewAdapter?.setItems(stations)
+                            recyclerViewAdapter?.notifyDataSetChanged()
                         },
                         { e ->
                             Toast.makeText(context, R.string.toast_error_network, Toast.LENGTH_SHORT).show()
                             Log.e(this.javaClass.simpleName, "Api request error", e)
                         },
                         {
-                            progrssBar?.visibility = View.GONE
+                            progressBar?.visibility = View.GONE
                         }
                 )
     }

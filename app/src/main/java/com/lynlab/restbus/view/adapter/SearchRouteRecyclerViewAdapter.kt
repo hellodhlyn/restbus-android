@@ -7,8 +7,8 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.lynlab.restbus.R
 import com.lynlab.restbus.model.BusRoute
+import com.lynlab.restbus.view.fragment.SearchRouteFragment
 import com.lynlab.restbus.view.viewholder.SearchRouteRecyclerVH
-import io.reactivex.Observable
 import io.reactivex.subjects.PublishSubject
 
 /**
@@ -16,7 +16,7 @@ import io.reactivex.subjects.PublishSubject
  */
 class SearchRouteRecyclerViewAdapter(private var context: Context) : RecyclerView.Adapter<SearchRouteRecyclerVH>() {
 
-    private val onItemClickSubject: PublishSubject<Int> = PublishSubject.create()
+    private val onItemClickSubject: PublishSubject<SearchRouteFragment.OnClickArgs> = PublishSubject.create()
     private var items: List<BusRoute> = ArrayList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchRouteRecyclerVH {
@@ -25,7 +25,9 @@ class SearchRouteRecyclerViewAdapter(private var context: Context) : RecyclerVie
     }
 
     override fun onBindViewHolder(holder: SearchRouteRecyclerVH, position: Int) {
-        holder.itemView.setOnClickListener({ onItemClickSubject.onNext(items[position].routeId) })
+        holder.itemView.setOnClickListener({
+            onItemClickSubject.onNext(SearchRouteFragment.OnClickArgs(routeId = items[position].routeId))
+        })
 
         holder.nameTextView!!.text = items[position].routeName
         holder.nameTextView!!.setTextColor(ContextCompat.getColor(context,
@@ -47,8 +49,8 @@ class SearchRouteRecyclerViewAdapter(private var context: Context) : RecyclerVie
         return items.size
     }
 
-    fun getOnItemClickObservable(): Observable<Int> {
-        return onItemClickSubject
+    fun onItemClick(consumer: (Any) -> Unit) {
+        onItemClickSubject.subscribe(consumer)
     }
 
     fun setItems(items: List<BusRoute>) {

@@ -1,5 +1,6 @@
 package com.lynlab.restbus.api
 
+import com.lynlab.restbus.model.BusArrival
 import com.lynlab.restbus.model.BusRoute
 import com.lynlab.restbus.model.BusStation
 import io.reactivex.Observable
@@ -50,6 +51,13 @@ class RestApi {
      */
     fun getStations(routeId: Int): Observable<List<BusStation>> {
         return restApiService.getStations(routeId)
+    }
+
+    /**
+     * GET /v1/arrivals?route_id={routeId}&station_id={stationId}&order={order}
+     */
+    fun getArrivals(routeId: Int, stationId: Int, order: Int): Observable<List<BusArrival>> {
+        return restApiService.getArrivals(routeId, stationId, order)
     }
 
 }

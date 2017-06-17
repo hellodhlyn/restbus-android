@@ -10,6 +10,9 @@ class BusStation {
     @SerializedName("station_id")
     var stationId: Int
 
+    @SerializedName("station_num")
+    var stationNum: Int
+
     @SerializedName("sequence")
     var sequence: Int
 
@@ -22,8 +25,9 @@ class BusStation {
     @SerializedName("direction")
     var direction: String
 
-    constructor(stationId: Int, sequence: Int, stationName: String, isTurnStation: Boolean, direction: String) {
+    constructor(stationId: Int, stationNum: Int, sequence: Int, stationName: String, isTurnStation: Boolean, direction: String) {
         this.stationId = stationId
+        this.stationNum = stationNum
         this.sequence = sequence
         this.stationName = stationName
         this.isTurnStation = isTurnStation
